@@ -34,7 +34,7 @@ const topbar = () => {
   const LogoIcon = logoConfig.icon;
 
   return (
-    <div className="flex p-4 items-center justify-between">
+    <div className="sticky top-0 z-50 flex p-4 items-center justify-between">
       <div className="text-slate-500">
         <LogoIcon size={20} />
       </div>
