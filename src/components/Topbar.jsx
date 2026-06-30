@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { navLinks, utilityActions, logoConfig } from "../data";
 
 const topbar = () => {
@@ -34,20 +34,23 @@ const topbar = () => {
   const LogoIcon = logoConfig.icon;
 
   return (
-    <div className="sticky top-0 z-50 flex p-4 items-center justify-between">
-      <div className="text-slate-500">
+    <div className="sticky top-0 z-50 flex p-4 items-center justify-between bg-white/80 backdrop-blur">
+      <Link
+        to="/"
+        className="text-slate-500 hover:text-slate-900 transition-colors"
+      >
         <LogoIcon size={20} />
-      </div>
+      </Link>
       <div className="flex gap-6 items-center text-slate-500">
         {navLinks.map((link) => {
           const IconComponent = link.icon;
           return (
             <NavLink
               key={link.id}
-              to={link.path}
+              to={link.to}
               className={({ isActive }) =>
-                `flex items-center gap-2 transition-colors hover:text-slate-900 ${
-                  isActive ? "text-slate-500 font-semibold" : "text-slate-900"
+                `flex items-center gap-2 transition-colors hover:text-slate-600 ${
+                  isActive ? "text-slate-600 font-semibold" : "text-slate-400"
                 }`
               }
             >
@@ -59,15 +62,32 @@ const topbar = () => {
       </div>
       <div className="flex gap-4 items-center text-slate-500">
         <span className="text-sm font-medium mr-2">{timeString}</span>
-        <button className="hover:text-slate-900 font-medium text-sm transition-colors cursor-pointer">
+        <Link
+          to="/create"
+          className="hover:text-slate-900 font-medium text-sm transition-colors"
+        >
           Create Event
-        </button>
+        </Link>
 
         {utilityActions.map((action) => {
           const ActionIcon = action.icon;
+          if (action.to) {
+            return (
+              <Link
+                key={action.id}
+                to={action.to}
+                title={action.name}
+                className="hover:text-slate-900 transition-colors p-1 rounded-full hover:bg-slate-50"
+              >
+                <ActionIcon size={action.size} />
+              </Link>
+            );
+          }
+
           return (
             <button
               key={action.id}
+              to={link.to}
               title={action.name}
               className="hover:text-slate-900 transition-colors p-1 rounded-full hover:bg-slate-50 cursor-pointer"
             >

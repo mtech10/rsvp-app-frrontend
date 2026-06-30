@@ -1,5 +1,6 @@
 import React from "react";
 import EventCards from "../components/EventCards";
+import Category from "../components/Category";
 
 const DiscoverEvents = () => {
   return (
@@ -15,7 +16,14 @@ const DiscoverEvents = () => {
           View All →
         </button>
       </div>
+
       <EventCards />
+      <div className="mt-8">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+          Browse by Category
+        </h2>
+        <Category />
+      </div>
     </section>
   );
 };

@@ -1,23 +1,26 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { navLinks, logoConfig, footerLinks } from "../data";
 
 const Footer = () => {
   const LogoIcon = logoConfig.icon;
 
   return (
-    <footer className="border-t border-slate-300 py-4 px-6">
-      <div className="mx-auto max-w-7xl flex items-center justify-between">
+    <footer className="border-t border-slate-300 py-4 px-6 bg-white">
+      <div className="mx-auto max-w-7xl flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-8">
-          <div className="text-slate-500">
+          <Link
+            to="/"
+            className="text-slate-500 hover:text-slate-900 transition-colors"
+          >
             <LogoIcon size={20} />
-          </div>
+          </Link>
 
           <div className="flex gap-6 items-center text-sm font-medium">
             {navLinks.map((link) => (
               <NavLink
                 key={link.id}
-                to={link.path}
+                to={link.to}
                 className={({ isActive }) =>
                   `transition-colors hover:text-slate-600 ${
                     isActive ? "text-slate-600 font-semibold" : "text-slate-400"
