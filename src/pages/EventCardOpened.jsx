@@ -21,6 +21,7 @@ const EventCardOpened = ({
   onRsvp,
   onClose,
   onNavigate,
+  isRsvpView = false,
 }) => {
   const [ticketCount, setTicketCount] = useState(1);
   const [showApprovalForm, setShowApprovalForm] = useState(false);
@@ -179,139 +180,155 @@ const EventCardOpened = ({
             </p>
           </div>
 
-          <div className="mt-12 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600">
-              Registration
-            </div>
-
-            <div className="px-5 pb-5">
-              {isApprovalRequired ? (
-                <>
-                  <div className="flex items-start gap-3 border-b border-slate-100 py-4">
-                    <div className="rounded-full bg-slate-100 p-2 text-slate-600">
-                      <UserCheck size={18} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-slate-900">
-                        Approval Required
-                      </span>
-                      <span className="text-sm text-slate-500">
-                        Your registration is subject to host approval.
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between py-4">
-                    <div className="flex items-center gap-2 font-semibold text-slate-900">
-                      <Hash size={18} className="text-slate-400" /> Tickets
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <button
-                        onClick={handleDecrement}
-                        className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className="w-4 text-center font-semibold text-slate-900">
-                        {ticketCount}
-                      </span>
-                      <button
-                        onClick={handleIncrement}
-                        className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                  </div>
-
-                  <UserProfileInfo />
-                  <button
-                    onClick={() => setShowApprovalForm(true)}
-                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
-                  >
-                    Request to Join
-                  </button>
-                </>
-              ) : isFree ? (
-                <>
-                  <p className="mt-4 text-sm text-slate-700">
-                    Welcome, Ademola Olusegun! To join the event, please
-                    register below.
-                  </p>
-
-                  <UserProfileInfo />
-
-                  <button
-                    onClick={() => handleRsvpAction("going", 1)}
-                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
-                  >
-                    One-Click RSVP
-                  </button>
-                </>
-              ) : isPaidOrRegistration ? (
-                <>
-                  <p className="mt-4 text-sm text-slate-700">
-                    Welcome, Ademola Olusegun! To join the event, please
-                    register below.
-                  </p>
-
-                  <UserProfileInfo />
-
-                  <button
-                    onClick={() => handleRsvpAction("going", 1)}
-                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
-                  >
-                    Register
-                  </button>
-                </>
-              ) : (
-                <p className="mt-4 text-sm text-slate-700">
-                  This event requires registration. Please contact the host for
-                  details.
+          {isRsvpView ? (
+            <div className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+              <h4 className="font-semibold text-slate-900">RSVP Status</h4>
+              <div className="mt-4 flex items-center gap-3">
+                <div
+                  className={`px-4 py-1.5 rounded-full text-sm font-bold 
+            ${event.status === "going" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}
+                >
+                  {event.status === "going" ? "Going" : "Pending Approval"}
+                </div>
+                <p className="text-sm text-slate-600">
+                  {event.tickets || 1} ticket(s) booked
                 </p>
-              )}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="mt-12 rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600">
+                Registration
+              </div>
+              <div className="px-5 pb-5">
+                {isApprovalRequired ? (
+                  <>
+                    <div className="flex items-start gap-3 border-b border-slate-100 py-4">
+                      <div className="rounded-full bg-slate-100 p-2 text-slate-600">
+                        <UserCheck size={18} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-slate-900">
+                          Approval Required
+                        </span>
+                        <span className="text-sm text-slate-500">
+                          Your registration is subject to host approval.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between py-4">
+                      <div className="flex items-center gap-2 font-semibold text-slate-900">
+                        <Hash size={18} className="text-slate-400" /> Tickets
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <button
+                          onClick={handleDecrement}
+                          className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="w-4 text-center font-semibold text-slate-900">
+                          {ticketCount}
+                        </span>
+                        <button
+                          onClick={handleIncrement}
+                          className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <UserProfileInfo />
+                    <button
+                      onClick={() => setShowApprovalForm(true)}
+                      className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                    >
+                      Request to Join
+                    </button>
+                  </>
+                ) : isFree ? (
+                  <>
+                    <p className="mt-4 text-sm text-slate-700">
+                      Welcome, Ademola Olusegun! To join the event, please
+                      register below.
+                    </p>
+
+                    <UserProfileInfo />
+
+                    <button
+                      onClick={() => handleRsvpAction("going", 1)}
+                      className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                    >
+                      One-Click RSVP
+                    </button>
+                  </>
+                ) : isPaidOrRegistration ? (
+                  <>
+                    <p className="mt-4 text-sm text-slate-700">
+                      Welcome, Ademola Olusegun! To join the event, please
+                      register below.
+                    </p>
+
+                    <UserProfileInfo />
+
+                    <button
+                      onClick={() => handleRsvpAction("going", 1)}
+                      className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                    >
+                      Register
+                    </button>
+                  </>
+                ) : (
+                  <p className="mt-4 text-sm text-slate-700">
+                    This event requires registration. Please contact the host
+                    for details.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {showApprovalForm && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+              <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95">
+                <div className="mb-6 flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-slate-900">
+                    Complete Registration
+                  </h3>
+                  <button
+                    onClick={() => setShowApprovalForm(false)}
+                    className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <form onSubmit={submitApprovalRequest}>
+                  <div className="mb-4">
+                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                      Additional Information
+                    </label>
+                    <textarea
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      rows="3"
+                      placeholder="Why would you like to attend?"
+                      required
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+                  >
+                    Submit Request
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {showApprovalForm && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-slate-900">
-                Complete Registration
-              </h3>
-              <button
-                onClick={() => setShowApprovalForm(false)}
-                className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <form onSubmit={submitApprovalRequest}>
-              <div className="mb-4">
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Additional Information
-                </label>
-                <textarea
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  rows="3"
-                  placeholder="Why would you like to attend?"
-                  required
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
-              >
-                Submit Request
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 };

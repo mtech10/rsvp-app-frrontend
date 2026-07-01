@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRSVP } from "../context/RSVPContext";
 import { formatDateParts } from "../utility/dateUtility";
 import { MapPin } from "lucide-react";
+import EventCardOpened from "./EventCardOpened";
 
 const LandingPage = () => {
   const { rsvpEvents } = useRSVP();
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   return (
     <section className="mx-auto max-w-6xl px-20 py-5">
@@ -57,6 +59,7 @@ const LandingPage = () => {
               <article
                 key={event.api_id}
                 className="flex gap-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
+                onClick={() => setSelectedEvent(event)}
               >
                 <div className="flex flex-col px-4 shrink-0">
                   <span className="text-base font-semibold text-slate-900">
@@ -102,6 +105,23 @@ const LandingPage = () => {
               </article>
             );
           })}
+        </div>
+      )}
+      {selectedEvent && (
+        <div
+          className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 px-4 py-2 backdrop-blur-sm"
+          onClick={() => setSelectedEvent(null)}
+        >
+          <div
+            className="relative flex h-full w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <EventCardOpened
+              event={selectedEvent}
+              isRsvpView={true}
+              onClose={() => setSelectedEvent(null)}
+            />
+          </div>
         </div>
       )}
     </section>

@@ -1,39 +1,9 @@
 import React from "react";
-import {
-  Cpu,
-  Coffee,
-  Palette,
-  Leaf,
-  Activity,
-  Tag,
-  Zap,
-  Star,
-  Music,
-  Film,
-} from "lucide-react";
-
-const icons = [
-  Cpu,
-  Coffee,
-  Palette,
-  Leaf,
-  Activity,
-  Tag,
-  Zap,
-  Star,
-  Music,
-  Film,
-];
-
-const hashString = (s) => {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
-  return Math.abs(h);
-};
+import { Tag } from "lucide-react";
+import { getCategoryIcon } from "../utility/categoryUtility";
 
 const CategoryHero = ({ category }) => {
-  const Icon = icons[hashString(category) % icons.length] || Tag;
-
+  const Icon = getCategoryIcon(category) || Tag;
   return (
     <div className="mb-12 flex justify-between p-6 ">
       <div className="flex flex-col">

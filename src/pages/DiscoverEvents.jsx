@@ -24,7 +24,7 @@ const DiscoverEvents = () => {
           View All →
         </button>
       </div>
-      <EventCards onSelect={selectedCategory} showAll={isFullView} />
+      <EventCards category={selectedCategory} showAll={isFullView} />
 
       {!isFullView && (
         <div className="mb-10 mt-10">

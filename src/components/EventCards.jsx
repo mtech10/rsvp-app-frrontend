@@ -23,7 +23,6 @@ const EventCards = ({ category = null, showAll = false }) => {
   };
   const handleClose = () => setSelectedId(null);
 
-  // Add this handler inside EventCards.jsx
   const handleNavigate = (direction) => {
     const currentIndex = events.findIndex((e) => e.api_id === selectedId);
     const nextIndex =
@@ -33,8 +32,6 @@ const EventCards = ({ category = null, showAll = false }) => {
       setSelectedId(events[nextIndex].api_id);
     }
   };
-
-  // Update the EventCardOpened component call:
 
   useEffect(() => {
     if (selectedId) {
@@ -76,7 +73,6 @@ const EventCards = ({ category = null, showAll = false }) => {
               onRsvp={handleRsvp}
               onClose={handleClose}
             />
-            ;
           </div>
         </div>
       )}

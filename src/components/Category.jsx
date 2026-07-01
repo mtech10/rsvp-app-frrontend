@@ -1,37 +1,8 @@
 import React from "react";
-import {
-  Cpu,
-  Coffee,
-  Palette,
-  Leaf,
-  Activity,
-  Tag,
-  Zap,
-  Star,
-  Music,
-  Film,
-} from "lucide-react";
+import { Tag } from "lucide-react";
 import { getEvents } from "../data";
 import { Link } from "react-router-dom";
-
-const icons = [
-  Cpu,
-  Coffee,
-  Palette,
-  Leaf,
-  Activity,
-  Tag,
-  Zap,
-  Star,
-  Music,
-  Film,
-];
-
-const hashString = (s) => {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
-  return Math.abs(h);
-};
+import { getCategoryIcon } from "../utility/categoryUtility";
 
 const formatCount = (n) => {
   if (!n) return "0 Events";
@@ -78,32 +49,33 @@ const Category = ({ limit = 1000, selectedCategory, onSelect }) => {
 
   return (
     <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((cat) => (
-        <Link
-          key={cat}
-          to={`/category/${cat}`}
-          onClick={() => onSelect?.(cat)}
-          className={`flex items-center gap-4 rounded-2xl border p-4 text-left transition hover:border-slate-300 hover:bg-slate-50 ${
-            selectedCategory === cat
-              ? "border-indigo-500 bg-slate-50"
-              : "border-slate-100 bg-white"
-          }`}
-        >
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-slate-700">
-            {React.createElement(icons[hashString(cat) % icons.length] || Tag, {
-              size: 25,
-            })}
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-slate-900">
-              {titleize(cat)}
+      {categories.map((cat) => {
+        const CategoryIcon = getCategoryIcon(cat) || Tag;
+        return (
+          <Link
+            key={cat}
+            to={`/category/${cat}`}
+            onClick={() => onSelect?.(cat)}
+            className={`flex items-center gap-4 rounded-2xl border p-4 text-left transition hover:border-slate-300 hover:bg-slate-50 ${
+              selectedCategory === cat
+                ? "border-indigo-500 bg-slate-50"
+                : "border-slate-100 bg-white"
+            }`}
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-slate-700">
+              <CategoryIcon size={25} />
             </div>
-            <div className="mt-1 text-sm text-slate-500">
-              {formatCount(counts[cat])}
+            <div>
+              <div className="text-lg font-semibold text-slate-900">
+                {titleize(cat)}
+              </div>
+              <div className="mt-1 text-sm text-slate-500">
+                {formatCount(counts[cat])}
+              </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        );
+      })}
     </section>
   );
 };
