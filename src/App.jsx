@@ -8,6 +8,7 @@ import DiscoverEvents from "./pages/DiscoverEvents";
 import CreateEvent from "./pages/CreateEvent";
 import SearchPage from "./pages/SearchPage";
 import NotificationPage from "./pages/NotificationPage";
+import CategoryPage from "./pages/CategoryPage";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/create" element={<CreateEvent />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/notifications" element={<NotificationPage />} />
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
         </Routes>
       </main>
       <Footer />

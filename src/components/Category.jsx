@@ -12,6 +12,7 @@ import {
   Film,
 } from "lucide-react";
 import { getEvents } from "../data";
+import { Link } from "react-router-dom";
 
 const icons = [
   Cpu,
@@ -78,22 +79,30 @@ const Category = ({ limit = 1000, selectedCategory, onSelect }) => {
   return (
     <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((cat) => (
-        <button
+        <Link
           key={cat}
-          type="button"
+          to={`/category/${cat}`}
           onClick={() => onSelect?.(cat)}
           className={`flex items-center gap-4 rounded-2xl border p-4 text-left transition hover:border-slate-300 hover:bg-slate-50 ${
-            selectedCategory === cat ? "border-indigo-500 bg-slate-50" : "border-slate-100 bg-white"
+            selectedCategory === cat
+              ? "border-indigo-500 bg-slate-50"
+              : "border-slate-100 bg-white"
           }`}
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-slate-700">
-            {React.createElement(icons[hashString(cat) % icons.length] || Tag, { size: 25 })}
+            {React.createElement(icons[hashString(cat) % icons.length] || Tag, {
+              size: 25,
+            })}
           </div>
           <div>
-            <div className="text-lg font-semibold text-slate-900">{titleize(cat)}</div>
-            <div className="mt-1 text-sm text-slate-500">{formatCount(counts[cat])}</div>
+            <div className="text-lg font-semibold text-slate-900">
+              {titleize(cat)}
+            </div>
+            <div className="mt-1 text-sm text-slate-500">
+              {formatCount(counts[cat])}
+            </div>
           </div>
-        </button>
+        </Link>
       ))}
     </section>
   );
