@@ -31,7 +31,7 @@ const DiscoverEvents = () => {
         />
       </div>
 
-      <EventCards category={selectedCategory} />
+      <EventCards onSelect={selectedCategory} />
     </section>
   );
 };

@@ -1,8 +1,23 @@
-import { MapPin } from "lucide-react";
-import React from "react";
+import {
+  MapPin,
+  ChevronsRight,
+  Copy,
+  ArrowUpRight,
+  ChevronUp,
+  ChevronDown,
+  Building2,
+  UserCheck,
+  Hash,
+  Minus,
+  Plus,
+  X,
+} from "lucide-react";
+import React, { useState } from "react";
 import { formatDateParts } from "../utility/dateUtility";
 
-const EventCardOpened = ({ event, onRsvp }) => {
+const EventCardOpened = ({ event, onRsvp, onClose }) => {
+  const [ticketCount, setTicketCount] = useState(1);
+  const [showApprovalForm, setShowApprovalForm] = useState(false);
   if (!event) return null;
 
   const date = formatDateParts(event.start_at);
@@ -12,87 +27,280 @@ const EventCardOpened = ({ event, onRsvp }) => {
   const cityLabel =
     event.city ||
     (event.location_type === "online" ? "Online" : "Various locations");
-  const priceLabel =
-    event.ticket_type === "free"
-      ? "Free"
-      : event.price
-        ? `$${event.price}`
-        : "Paid";
 
-  return (
-    <article className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_20px_60px_-25px_rgba(15,23,42,0.35)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_70px_-25px_rgba(15,23,42,0.4)]">
-      <div className="relative h-44 overflow-hidden sm:h-52">
-        <img
-          src={event.cover_url}
-          alt={`${event.name} event cover`}
-          loading="lazy"
-          className="h-full w-full object-cover transition duration-300 hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
+  const handleIncrement = () => setTicketCount((prev) => prev + 1);
+  const handleDecrement = () =>
+    setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
+
+  const UserProfileInfo = () => (
+    <div className="flex items-center gap-3 py-4">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">
+        OA
       </div>
+      <div className="flex flex-col">
+        <span className="text-sm font-semibold text-slate-900">
+          OYELUSI ADEMOLA OLUSEGUN
+        </span>
+        <span className="text-sm text-slate-500">
+          oyelusiaomichael1009@gmail.com
+        </span>
+      </div>
+    </div>
+  );
 
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="text-3xl font-bold text-slate-900">{event.name}</h3>
+  const ticketType = event.ticket_type?.toLowerCase().trim() || "";
+  const isRegistration = ticketType === "registration";
+  const isApprovalRequired =
+    ticketType.includes("approval") || event.require_approval;
+  const isFree = ticketType === "free";
+  const isPaid = ticketType === "paid";
+  const isPaidOrRegistration = isPaid || isRegistration;
+  console.log("Current Event Type:", ticketType);
+
+  const handleRsvpAction = (status, tickets = 1) => {
+    onRsvp({ api_id: event.api_id, status, tickets });
+    onClose();
+  };
+
+  const submitApprovalRequest = (e) => {
+    e.preventDefault();
+    onRsvp({
+      api_id: event.api_id,
+      status: "pending",
+      tickets: ticketCount,
+    });
+    setShowApprovalForm(false);
+    onClose();
+  };
+  return (
+    <>
+      <div className="flex flex-1 w-full flex-col overflow-hidden bg-white">
+        <div className="z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4 py-3">
+          <button
+            onClick={onClose}
+            className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+          >
+            <ChevronsRight size={20} />
+          </button>
+
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-200">
+              <Copy size={14} /> Copy Link
+            </button>
+            <button className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-200">
+              Event Page <ArrowUpRight size={14} />
+            </button>
           </div>
-          <div className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
-            {priceLabel}
+
+          <div className="flex items-center gap-1 text-slate-400">
+            <button className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600">
+              <ChevronUp size={20} />
+            </button>
+            <button className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600">
+              <ChevronDown size={20} />
+            </button>
           </div>
         </div>
-
-        <div className="mt-6 flex gap-4 sm:items-center rounded-3xl bg-slate-50">
-          <div className="rounded-sm p-1 bg-slate-100  border border-slate-200 text-center shadow-sm backdrop-blur-sm">
-            <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-slate-600 ">
-              {date.month}
-            </span>
-            <span className="mt-1 text-xl font-bold tracking-tight text-slate-800">
-              {date.day}
-            </span>
+        <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-20 pt-8 sm:px-12">
+          <div className="relative flex justify-center">
+            <img
+              src={event.cover_url}
+              alt={`${event.name} event cover`}
+              loading="lazy"
+              className="h-full w-full object-cover shadow-2xl transition duration-300 hover:scale-105 rounded-xl sm:w-100"
+            />
           </div>
+          <div className="mt-10 flex items-center gap-2 text-sm text-slate-500">
+            <span className="flex items-center rounded-md bg-slate-100 p-1 text-slate-500">
+              <Building2 size={14} />
+            </span>
+            Featured in{" "}
+            <span className="font-semibold text-slate-800">{cityLabel}</span>
+          </div>
+          <div className="flex justify-between">
+            <h3 className="text-3xl font-bold text-slate-900">{event.name}</h3>
+          </div>
+
+          <div className="mt-10 flex justify-between gap-4 sm:items-center rounded-3xl bg-slate-50">
+            <div className="flex gap-3">
+              <div className="rounded-sm p-1 bg-slate-100  border border-slate-200 text-center shadow-sm backdrop-blur-sm">
+                <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-slate-600 ">
+                  {date.month}
+                </span>
+                <span className="mt-1 text-xl font-bold tracking-tight text-slate-800">
+                  {date.day}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-base font-semibold text-slate-900">
+                  {date.weekday}, {date.month} {date.day}
+                </span>
+                <span className="mt-1 text-sm  text-slate-600">
+                  {date.time} - {endDate.time}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 items-center rounded-3xl bg-slate-50 p-5">
+              <MapPin size={30} />
+              <div className="flex flex-col">
+                <span className="mt-2 text-sm text-slate-900 font-semibold">
+                  {addressLabel}
+                </span>
+                <span className="mt-1 text-base  text-slate-600">
+                  {cityLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-col">
-            <span className="text-base font-semibold text-slate-900">
-              {date.weekday}, {date.month} {date.day}
-            </span>
-            <span className="mt-1 text-sm  text-slate-600">
-              {date.time} - {endDate.time}
-            </span>
+            <p className="text-slate-600 text-md">About Event</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-900">
+              {event.description}
+            </p>
           </div>
 
-          <div className="flex gap-2 items-center rounded-3xl bg-slate-50 p-5">
-            <MapPin size={30} />
-            <div className="flex flex-col">
-              <span className="mt-2 text-sm text-slate-900 font-semibold">
-                {addressLabel}
-              </span>
-              <span className="mt-1 text-base  text-slate-600">
-                {cityLabel}
-              </span>
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <p className="text-sm text-slate-500">
+              {event.rsvp_count || 0} people going
+            </p>
+          </div>
+
+          <div className="mt-12 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600">
+              Registration
+            </div>
+
+            <div className="px-5 pb-5">
+              {isApprovalRequired ? (
+                <>
+                  <div className="flex items-start gap-3 border-b border-slate-100 py-4">
+                    <div className="rounded-full bg-slate-100 p-2 text-slate-600">
+                      <UserCheck size={18} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-slate-900">
+                        Approval Required
+                      </span>
+                      <span className="text-sm text-slate-500">
+                        Your registration is subject to host approval.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center gap-2 font-semibold text-slate-900">
+                      <Hash size={18} className="text-slate-400" /> Tickets
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={handleDecrement}
+                        className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <span className="w-4 text-center font-semibold text-slate-900">
+                        {ticketCount}
+                      </span>
+                      <button
+                        onClick={handleIncrement}
+                        className="rounded-md bg-slate-50 p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <UserProfileInfo />
+                  <button
+                    onClick={() => setShowApprovalForm(true)}
+                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                  >
+                    Request to Join
+                  </button>
+                </>
+              ) : isFree ? (
+                <>
+                  <p className="mt-4 text-sm text-slate-700">
+                    Welcome, Ademola Olusegun! To join the event, please
+                    register below.
+                  </p>
+
+                  <UserProfileInfo />
+
+                  <button
+                    onClick={() => handleRsvpAction("going", 1)}
+                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                  >
+                    One-Click RSVP
+                  </button>
+                </>
+              ) : isPaidOrRegistration ? (
+                <>
+                  <p className="mt-4 text-sm text-slate-700">
+                    Welcome, Ademola Olusegun! To join the event, please
+                    register below.
+                  </p>
+
+                  <UserProfileInfo />
+
+                  <button
+                    onClick={() => handleRsvpAction("going", 1)}
+                    className="mt-2 w-full rounded-xl bg-[#2C2C2C] py-3 text-sm font-bold text-white transition hover:bg-black"
+                  >
+                    Register
+                  </button>
+                </>
+              ) : (
+                <p className="mt-4 text-sm text-slate-700">
+                  This event requires registration. Please contact the host for
+                  details.
+                </p>
+              )}
             </div>
           </div>
         </div>
-
-        <div className="flex flex-col">
-          <p className="text-slate-600 text-md">About Event</p>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-900">
-            {event.description}
-          </p>
-        </div>
-
-        <div className="mt-6 flex items-center justify-between gap-4">
-          <p className="text-sm text-slate-500">
-            {event.rsvp_count || 0} people going
-          </p>
-          <button
-            type="button"
-            onClick={onRsvp}
-            className="rounded-full bg-slate-900 px-5 py-2 text-sm font-bold text-white transition hover:bg-slate-700"
-          >
-            One-Click RSVP
-          </button>
-        </div>
       </div>
-    </article>
+
+      {showApprovalForm && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-slate-900">
+                Complete Registration
+              </h3>
+              <button
+                onClick={() => setShowApprovalForm(false)}
+                className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={submitApprovalRequest}>
+              <div className="mb-4">
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  Additional Information
+                </label>
+                <textarea
+                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  rows="3"
+                  placeholder="Why would you like to attend?"
+                  required
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+              >
+                Submit Request
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

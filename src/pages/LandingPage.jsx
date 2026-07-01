@@ -43,6 +43,16 @@ const LandingPage = () => {
           {rsvpEvents.map((event) => {
             const date = formatDateParts(event.start_at);
             const endDate = formatDateParts(event.end_at);
+            const statusLabel =
+              event.status === "pending"
+                ? "Pending"
+                : event.status === "going"
+                  ? "Going"
+                  : null;
+            const badgeStyles =
+              statusLabel === "Going"
+                ? "bg-emerald-100 text-emerald-700"
+                : "bg-amber-100 text-amber-700";
             return (
               <article
                 key={event.api_id}
@@ -61,9 +71,18 @@ const LandingPage = () => {
                   <span className=" text-lg font-semibold  text-slate-600">
                     {date.time}
                   </span>
-                  <h2 className="text-xl font-semibold text-slate-900">
-                    {event.name}
-                  </h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-semibold text-slate-900">
+                      {event.name}
+                    </h2>
+                    {statusLabel ? (
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeStyles}`}
+                      >
+                        {statusLabel}
+                      </span>
+                    ) : null}
+                  </div>
                   <span className="mt-2 text-sm text-slate-600">
                     {event.hosts[0]?.name}
                   </span>

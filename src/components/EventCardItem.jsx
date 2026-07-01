@@ -61,13 +61,6 @@ const EventCardItem = ({ event, selected, onClick }) => {
         </div>
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span>{event.rsvp_count || 0} attending</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-            {event.ticket_type === "free"
-              ? "Free"
-              : event.ticket_type === "paid"
-                ? "Paid"
-                : "Ticketed"}
-          </span>
         </div>
       </div>
     </button>
