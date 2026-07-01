@@ -4,6 +4,7 @@ import EventCards from "../components/EventCards";
 
 const DiscoverEvents = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFullView, setIsFullView] = useState(false);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-10">
@@ -16,22 +17,26 @@ const DiscoverEvents = () => {
             Discover
           </h1>
         </div>
-        <button className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">
+        <button
+          onClick={() => setIsFullView(true)}
+          className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+        >
           View All →
         </button>
       </div>
+      <EventCards onSelect={selectedCategory} showAll={isFullView} />
 
-      <div className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">
-          Browse by Category
-        </h2>
-        <Category
-          selectedCategory={selectedCategory}
-          onSelect={setSelectedCategory}
-        />
-      </div>
-
-      <EventCards onSelect={selectedCategory} />
+      {!isFullView && (
+        <div className="mb-10 mt-10">
+          <h2 className="mb-4 text-lg font-semibold text-slate-900">
+            Browse by Category
+          </h2>
+          <Category
+            selectedCategory={selectedCategory}
+            onSelect={setSelectedCategory}
+          />
+        </div>
+      )}
     </section>
   );
 };

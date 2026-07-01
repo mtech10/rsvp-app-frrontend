@@ -15,7 +15,13 @@ import {
 import React, { useState } from "react";
 import { formatDateParts } from "../utility/dateUtility";
 
-const EventCardOpened = ({ event, onRsvp, onClose }) => {
+const EventCardOpened = ({
+  event,
+  events = [],
+  onRsvp,
+  onClose,
+  onNavigate,
+}) => {
   const [ticketCount, setTicketCount] = useState(1);
   const [showApprovalForm, setShowApprovalForm] = useState(false);
   if (!event) return null;
@@ -93,10 +99,16 @@ const EventCardOpened = ({ event, onRsvp, onClose }) => {
           </div>
 
           <div className="flex items-center gap-1 text-slate-400">
-            <button className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600">
+            <button
+              className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600"
+              onClick={() => onNavigate("prev")}
+            >
               <ChevronUp size={20} />
             </button>
-            <button className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600">
+            <button
+              className="rounded-lg p-1.5 transition hover:bg-slate-100 hover:text-slate-600"
+              onClick={() => onNavigate("next")}
+            >
               <ChevronDown size={20} />
             </button>
           </div>

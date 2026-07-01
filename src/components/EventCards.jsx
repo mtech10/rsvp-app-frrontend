@@ -4,8 +4,11 @@ import EventCardOpened from "../pages/EventCardOpened";
 import EventCardItem from "./EventCardItem";
 import { useRSVP } from "../context/RSVPContext";
 
-const EventCards = ({ category = null }) => {
-  const { events = [] } = getEvents({ limit: 12, category });
+const EventCards = ({ category = null, showAll = false }) => {
+  const { events = [] } = getEvents({
+    limit: showAll ? 100 : 12,
+    category,
+  });
   const [selectedId, setSelectedId] = useState(null);
   const { addRsvp } = useRSVP();
 
@@ -19,6 +22,19 @@ const EventCards = ({ category = null }) => {
     if (registrationData) addRsvp(registrationData);
   };
   const handleClose = () => setSelectedId(null);
+
+  // Add this handler inside EventCards.jsx
+  const handleNavigate = (direction) => {
+    const currentIndex = events.findIndex((e) => e.api_id === selectedId);
+    const nextIndex =
+      direction === "next" ? currentIndex + 1 : currentIndex - 1;
+
+    if (events[nextIndex]) {
+      setSelectedId(events[nextIndex].api_id);
+    }
+  };
+
+  // Update the EventCardOpened component call:
 
   useEffect(() => {
     if (selectedId) {
@@ -56,9 +72,11 @@ const EventCards = ({ category = null }) => {
           >
             <EventCardOpened
               event={selectedEvent}
+              onNavigate={handleNavigate}
               onRsvp={handleRsvp}
               onClose={handleClose}
             />
+            ;
           </div>
         </div>
       )}
