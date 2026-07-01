@@ -167,7 +167,7 @@ const EventCardOpened = ({ event, onRsvp, onClose }) => {
             </p>
           </div>
 
-          <div className="mt-12 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="mt-12 rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600">
               Registration
             </div>
