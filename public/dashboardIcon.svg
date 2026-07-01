@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <!-- Subtle gradient for the main card background to give it depth -->
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#444446" />
+      <stop offset="100%" stop-color="#2a2a2c" />
+    </linearGradient>
+
+    <!-- Slightly lighter gradient for the notification badge to make it pop -->
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#555558" />
+      <stop offset="100%" stop-color="#3b3b3d" />
+    </linearGradient>
+
+    <!-- Soft drop shadow underneath the badge -->
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Main Dashboard Card -->
+  <rect x="18" y="18" width="64" height="64" rx="12" fill="url(#cardGrad)" />
+
+  <!-- === Inner UI Layout Elements === -->
+  
+  <!-- Header Bar -->
+  <rect x="25" y="26" width="36" height="6" rx="3" fill="#18181a" />
+
+  <!-- Left Column Layout -->
+  <rect x="25" y="40" width="15" height="8" rx="4" fill="#18181a" />
+  <rect x="25" y="60" width="16" height="16" rx="4" fill="#18181a" />
+
+  <!-- Center Column Layout -->
+  <rect x="44" y="34" width="16" height="18" rx="4" fill="#18181a" />
+  <rect x="44" y="68" width="16" height="8" rx="4" fill="#18181a" />
+
+  <!-- Right Column Layout -->
+  <rect x="64" y="52" width="14" height="16" rx="4" fill="#18181a" />
+
+  <!-- === Notification Badge === -->
+  
+  <!-- Badge Base -->
+  <rect x="66" y="10" width="24" height="24" rx="8" fill="url(#badgeGrad)" filter="url(#badgeShadow)" />
+
+  <!-- Number '0' Vector Path (Guarantees exact rendering across all browsers/fonts) -->
+  <path d="M 78 16 C 73.5 16 71 19 71 24 C 71 29 73.5 32 78 32 C 82.5 32 85 29 85 24 C 85 19 82.5 16 78 16 Z M 78 20 C 80.5 20 81 21.5 81 24 C 81 26.5 80.5 28 78 28 C 75.5 28 75 26.5 75 24 C 75 21.5 75.5 20 78 20 Z" fill="#18181a" />
+</svg>
